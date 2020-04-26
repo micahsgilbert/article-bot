@@ -17,9 +17,10 @@ class WiredArticle(Article):
 
   def assemble_text(self, paragraphs):
     text = ""
+    # Just gets the first line of every paragraph if it isn't a quote or first-person thing
     for p in paragraphs:
       line = p.get_text().split(".")[0]
-      if ("my" not in line and '"' not in line):
+      if ("my" not in line and "I" not in line and '"' not in line):
         text += line + ". "
     return text
 
