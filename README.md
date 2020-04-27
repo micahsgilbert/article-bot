@@ -2,7 +2,7 @@
 
 ## Usage
 
-After configuring, (currently only setting a wired.com url) you just have to run `python3 main.py`.
+`python3 main.py -u <url>`
 
 ## Configuration
 
