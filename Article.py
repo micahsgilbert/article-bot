@@ -15,7 +15,7 @@ class Article:
   def assemble_text(self):
     raise NameError("Function assemble_text required but not defined")
 
-  def generate_description(self):
+  def generate(self):
     return f"""Title: {self.get_title()}
 URL: {self.url}
 Date: {self.get_date()}

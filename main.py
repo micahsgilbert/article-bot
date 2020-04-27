@@ -1,33 +1,25 @@
 import requests
+import sys
 from bs4 import BeautifulSoup
-from Article import Article
+from article_configurations import articles
 
-class WiredArticle(Article):
-  def __init__(self, soup, url):
-    super().__init__(soup, url)
-  
-  def get_title(self):
-    return self.soup.title.string
+def get_domain_from_url(u):
+  u = u[u.index("//")+2:]
+  u = u[:u.index("/")]
+  return u
 
-  def get_date(self):
-    return self.soup.time.string
+if "-u" in sys.argv:
+  url = sys.argv[sys.argv.index("-u") + 1]
 
-  def enumerate_paragraphs(self):
-    return self.soup.find_all("p")[2:-4]
+else:
+  url = input("Article URL: ")
 
-  def assemble_text(self, paragraphs):
-    text = ""
-    # Just gets the first line of every paragraph if it isn't a quote or first-person thing
-    for p in paragraphs:
-      line = p.get_text().split(".")[0]
-      if ("my" not in line and "I" not in line and '"' not in line):
-        text += line + ". "
-    return text
-
-url = "https://www.wired.com/story/sneaky-zero-click-attacks-hidden-menace/"
+domain = get_domain_from_url(url)
 r = requests.get(url)
 soup = BeautifulSoup(r.content, "html.parser")
 
-w = WiredArticle(soup, url)
-
-print(w.generate_description())
+try:
+  article = articles[domain](soup, url)
+  print(article.generate())
+except KeyError:
+  print("Article type not configured")
